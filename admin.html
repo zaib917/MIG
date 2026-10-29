@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1565c0">
+<title>Admin Dashboard • Matric & Intermediate Guide</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#f4f7fb;color:#222}
+header{background:#1565c0;color:#fff;padding:20px;text-align:center}
+header h1{margin:0;font-size:23px}
+header p{margin:5px 0 0;font-size:13px}
+.container{max-width:850px;margin:auto;padding:18px}
+.box{background:#fff;padding:20px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 12px #0001}
+h2{color:#1565c0;margin-top:0}
+input,select,textarea{width:100%;padding:13px;margin:7px 0;border:1px solid #ccc;border-radius:8px;font-size:15px}
+textarea{min-height:90px;resize:vertical}
+.btn{padding:11px 16px;border:0;border-radius:8px;margin:4px;cursor:pointer;font-weight:700}
+.primary{background:#1565c0;color:#fff}
+.danger{background:#d32f2f;color:#fff}
+.edit{background:#f57c00;color:#fff}
+.dark{background:#555;color:#fff}
+.hidden{display:none!important}
+.item{background:#fafafa;border:1px solid #ddd;padding:15px;border-radius:10px;margin:10px 0}
+.item h3{color:#1565c0;margin-top:0}
+.item p{line-height:1.4}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:75px}
+.show-pass{position:absolute;right:10px;top:13px;border:0;background:#eef3f8;color:#1565c0;padding:8px 10px;border-radius:7px;font-weight:700;cursor:pointer}
+.msg{min-height:20px}
+.success{color:#187a35}
+.error{color:#c62828}
+.note{font-size:12px;color:#666;line-height:1.45}
+.link{word-break:break-all}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🔐 Admin Dashboard</h1>
+<p>Matric & Intermediate Guide</p>
+</header>
+
+<div class="container">
+
+<div id="loginBox" class="box">
+<h2>Admin Login</h2>
+
+<input id="email" type="email" autocomplete="username" placeholder="Admin Email">
+
+<div class="password-wrap">
+<input id="password" type="password" autocomplete="current-password" placeholder="Password">
+<button type="button" class="show-pass" id="showPasswordBtn">Show</button>
+</div>
+
+<button class="btn primary" id="loginBtn">Login</button>
+<p id="loginMsg" class="msg"></p>
+<p class="note">Only your Firebase Authentication admin account should be used here.</p>
+</div>
+
+<div id="dash" class="hidden">
+
+<div class="box">
+<h2 id="formTitle">Add New Material</h2>
+
+<input id="title" placeholder="Material Title">
+
+<select id="className">
+<option value="">Select Class</option>
+<option>9th</option>
+<option>10th</option>
+<option>11th</option>
+<option>12th</option>
+</select>
+
+<select id="category">
+<option value="">Select Category</option>
+<option>Books</option>
+<option>Notes</option>
+<option>Past Papers</option>
+<option>Pairing Schemes</option>
+<option>Guess Papers</option>
+<option>Important Questions</option>
+<option>Date Sheets</option>
+<option>MCQs</option>
+<option>Games</option>
+</select>
+
+<textarea id="description" placeholder="Description (optional)"></textarea>
+
+<input id="link" type="url" placeholder="Google Drive / MEGA / direct PDF link">
+
+<button id="saveBtn" class="btn primary">Add Material</button>
+<button id="cancelBtn" class="btn dark hidden">Cancel</button>
+
+<p id="formMsg" class="msg"></p>
+<p class="note">Upload the PDF to Google Drive first, make it accessible to people with the link, then paste the PDF/share link here.</p>
+</div>
+
+<div class="box">
+<h2>Manage Materials</h2>
+<div id="list">Loading...</div>
+<button id="logoutBtn" class="btn dark">Logout</button>
+</div>
+
+</div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const cfg={
+apiKey:"AIzaSyCEHTZWK_wUYr7JY3tnxYl3o25qfIZdUJY",
+authDomain:"matric-and-intermediate-guide.firebaseapp.com",
+databaseURL:"https://matric-and-intermediate-guide-default-rtdb.firebaseio.com",
+projectId:"matric-and-intermediate-guide",
+storageBucket:"matric-and-intermediate-guide.firebasestorage.app",
+messagingSenderId:"623596940051",
+appId:"1:623596940051:web:065599f46fa805cdf748e6",
+measurementId:"G-SYTQ7PEV66"
+};
+
+const app=initializeApp(cfg);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+let editing=null;
+let stopMaterialsListener=null;
+
+const $=id=>document.getElementById(id);
+
+$("showPasswordBtn").addEventListener("click",()=>{
+  const input=$("password");
+  const showing=input.type==="text";
+  input.type=showing?"password":"text";
+  $("showPasswordBtn").textContent=showing?"Show":"Hide";
+});
+
+$("loginBtn").addEventListener("click",login);
+
+$("password").addEventListener("keydown",e=>{
+  if(e.key==="Enter")login();
+});
+
+$("email").addEventListener("keydown",e=>{
+  if(e.key==="Enter")$("password").focus();
+});
+
+async function login(){
+  const email=$("email").value.trim();
+  const password=$("password").value;
+
+  $("loginMsg").className="msg";
+  $("loginMsg").textContent="";
+
+  if(!email||!password){
+    $("loginMsg").className="msg error";
+    $("loginMsg").textContent="Enter your email and password.";
+    return;
+  }
+
+  $("loginBtn").disabled=true;
+  $("loginBtn").textContent="Logging in...";
+
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+    $("loginMsg").textContent="";
+  }catch(e){
+    $("loginMsg").className="msg error";
+    $("loginMsg").textContent="Login failed. Check your email and password.";
+  }finally{
+    $("loginBtn").disabled=false;
+    $("loginBtn").textContent="Login";
+  }
+}
+
+onAuthStateChanged(auth,user=>{
+  $("loginBox").classList.toggle("hidden",!!user);
+  $("dash").classList.toggle("hidden",!user);
+
+  if(user){
+    loadMaterials();
+  }else{
+    if(stopMaterialsListener){
+      stopMaterialsListener();
+      stopMaterialsListener=null;
+    }
+  }
+});
+
+$("logoutBtn").addEventListener("click",()=>signOut(auth));
+
+$("saveBtn").addEventListener("click",saveMaterial);
+$("cancelBtn").addEventListener("click",clearForm);
+
+async function saveMaterial(){
+  const data={
+    title:$("title").value.trim(),
+    class:$("className").value,
+    category:$("category").value,
+    description:$("description").value.trim(),
+    link:$("link").value.trim(),
+    updatedAt:serverTimestamp()
+  };
+
+  if(!data.title||!data.class||!data.category){
+    $("formMsg").className="msg error";
+    $("formMsg").textContent="Title, class and category are required.";
+    return;
+  }
+
+  $("saveBtn").disabled=true;
+  $("formMsg").className="msg";
+  $("formMsg").textContent="Saving...";
+
+  try{
+    if(editing){
+      await updateDoc(doc(db,"materials",editing),data);
+      $("formMsg").className="msg success";
+      $("formMsg").textContent="Material updated successfully.";
+    }else{
+      await addDoc(collection(db,"materials"),{
+        ...data,
+        createdAt:serverTimestamp(),
+        uploadedAt:serverTimestamp()
+      });
+      $("formMsg").className="msg success";
+      $("formMsg").textContent="Material added successfully.";
+    }
+
+    clearForm(true);
+  }catch(e){
+    console.error(e);
+    $("formMsg").className="msg error";
+    $("formMsg").textContent="Save failed. Check Firebase rules and login.";
+  }finally{
+    $("saveBtn").disabled=false;
+  }
+}
+
+function loadMaterials(){
+  if(stopMaterialsListener)stopMaterialsListener();
+
+  stopMaterialsListener=onSnapshot(
+    collection(db,"materials"),
+    snapshot=>{
+      const list=$("list");
+      list.innerHTML="";
+
+      if(snapshot.empty){
+        list.innerHTML='<div class="item">No materials yet.</div>';
+        return;
+      }
+
+      snapshot.forEach(x=>{
+        const d=x.data();
+        const item=document.createElement("div");
+        item.className="item";
+
+        const h=document.createElement("h3");
+        h.textContent=d.title||"Untitled";
+
+        const p1=document.createElement("p");
+        p1.textContent=`Class: ${d.class||""} | Category: ${d.category||""}`;
+
+        const p2=document.createElement("p");
+        p2.textContent=d.description||"";
+
+        const p3=document.createElement("p");
+        p3.className="link";
+        p3.textContent=d.link||"No link";
+
+        const edit=document.createElement("button");
+        edit.className="btn edit";
+        edit.textContent="Edit";
+        edit.addEventListener("click",()=>editMaterial(x.id));
+
+        const remove=document.createElement("button");
+        remove.className="btn danger";
+        remove.textContent="Delete";
+        remove.addEventListener("click",()=>removeMaterial(x.id));
+
+        item.append(h,p1);
+        if(d.description)item.appendChild(p2);
+        item.append(p3,edit,remove);
+        list.appendChild(item);
+      });
+    },
+    error=>{
+      $("list").innerHTML='<div class="item">Could not load materials. Check your Firebase connection and Firestore rules.</div>';
+      console.error(error);
+    }
+  );
+}
+
+async function editMaterial(id){
+  try{
+    const snap=await getDoc(doc(db,"materials",id));
+    if(!snap.exists())return;
+
+    const d=snap.data();
+
+    $("title").value=d.title||"";
+    $("className").value=d.class||"";
+    $("category").value=d.category||"";
+    $("description").value=d.description||"";
+    $("link").value=d.link||"";
+
+    editing=id;
+    $("formTitle").textContent="Edit Material";
+    $("saveBtn").textContent="Update Material";
+    $("cancelBtn").classList.remove("hidden");
+    $("formMsg").textContent="";
+
+    window.scrollTo({top:0,behavior:"smooth"});
+  }catch(e){
+    console.error(e);
+    $("formMsg").className="msg error";
+    $("formMsg").textContent="Could not open this material.";
+  }
+}
+
+async function removeMaterial(id){
+  if(!confirm("Delete this material?"))return;
+
+  try{
+    await deleteDoc(doc(db,"materials",id));
+  }catch(e){
+    console.error(e);
+    alert("Delete failed. Check your Firebase rules.");
+  }
+}
+
+function clearForm(keepMessage=false){
+  editing=null;
+  $("title").value="";
+  $("className").value="";
+  $("category").value="";
+  $("description").value="";
+  $("link").value="";
+  $("formTitle").textContent="Add New Material";
+  $("saveBtn").textContent="Add Material";
+  $("cancelBtn").classList.add("hidden");
+
+  if(!keepMessage){
+    $("formMsg").className="msg";
+    $("formMsg").textContent="";
+  }
+}
+</script>
+</body>
+</html>

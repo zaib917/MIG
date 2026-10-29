@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>Matric & Intermediate Guide</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#101827;--muted:#64748b;--line:#e2e8f0;--brand:#2563eb;--soft:#eff6ff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}button,a{font:inherit}button{cursor:pointer}
+.top{position:sticky;top:0;z-index:50;background:rgba(245,247,251,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topin{height:72px;max-width:1000px;margin:auto;padding:0 16px;display:flex;align-items:center;gap:12px}.brand{min-width:0;flex:1}.brand h1{font-size:19px;line-height:1.15;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand p{font-size:11px;color:var(--muted);margin:5px 0 0}.menuBtn{width:44px;height:44px;flex:none;border:1px solid var(--line);border-radius:13px;background:#fff;font-size:23px;box-shadow:0 2px 8px #00000008}
+.wrap{max-width:1000px;margin:auto}.hero{padding:22px 16px 12px}.hero h2{margin:0;font-size:27px;letter-spacing:-.7px}.hero p{margin:7px 0 0;color:var(--muted);font-size:13px}
+.classNav{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;scrollbar-width:none}.classNav::-webkit-scrollbar{display:none}.classBtn{min-width:76px;padding:11px 16px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--muted);font-weight:800;transition:.2s}.classBtn.active{background:var(--ink);border-color:var(--ink);color:#fff;transform:translateY(-1px)}
+.viewport{overflow:hidden;touch-action:pan-y}.track{display:flex;width:400%;transition:transform .42s cubic-bezier(.22,.8,.2,1);will-change:transform}.classPage{width:25%;flex:none;padding:8px 16px 0}.classHead{display:flex;justify-content:space-between;align-items:end;margin:5px 0 13px}.classHead h3{margin:0;font-size:19px}.count{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cat{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:15px;text-align:left;min-height:86px;box-shadow:0 2px 10px #00000005;transition:transform .16s,box-shadow .16s}.cat:active{transform:scale(.97)}.cat strong{display:block;font-size:14px;margin-bottom:6px}.cat small{display:block;color:var(--muted);font-size:11px;line-height:1.35}
+.swipeHint{text-align:center;color:var(--muted);font-size:11px;padding:16px 0 3px}.dots{text-align:center;padding:5px 0 20px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#cbd5e1;margin:0 3px;transition:.2s}.dot.active{width:20px;border-radius:5px;background:var(--ink)}
+.materials,.downloads{padding:0 16px 25px}.sectionHead{display:flex;justify-content:space-between;align-items:end;margin:10px 0 12px}.sectionHead h3{margin:0;font-size:18px}.sectionHead span{font-size:11px;color:var(--muted)}.material{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:10px;box-shadow:0 2px 10px #00000005}.material h4{margin:0 0 5px;font-size:15px}.meta{font-size:11px;color:var(--muted)}.desc{font-size:13px;color:#475569;margin:8px 0;line-height:1.45}.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;border:0;border-radius:10px;margin:8px 6px 0 0;font-weight:800;font-size:12px;text-decoration:none}.open{background:var(--brand);color:#fff}.download{background:#0f172a;color:#fff}.remove{background:#fee2e2;color:#991b1b}.empty{background:#fff;border:1px dashed #cbd5e1;border-radius:15px;padding:22px;text-align:center;color:var(--muted);font-size:13px}
+.overlay{position:fixed;inset:0;background:#0008;z-index:80;opacity:0;pointer-events:none;transition:.25s}.overlay.show{opacity:1;pointer-events:auto}.drawer{position:fixed;right:0;top:0;width:min(86vw,390px);height:100dvh;background:#fff;z-index:90;padding:22px 18px;transform:translateX(105%);transition:.3s cubic-bezier(.2,.8,.2,1);box-shadow:-12px 0 35px #0003}.drawer.show{transform:translateX(0)}.drawerTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.drawerTop h2{margin:0}.closeBtn{border:0;background:#f1f5f9;border-radius:10px;width:40px;height:40px;font-size:20px}.opt{display:block;width:100%;padding:15px;margin:8px 0;text-align:left;border:1px solid var(--line);border-radius:13px;background:#f8fafc;font-weight:700}
+.panel{position:fixed;inset:0;background:#0007;z-index:100;display:flex;align-items:stretch;justify-content:flex-end;opacity:0;pointer-events:none;transition:.2s}.panel.show{opacity:1;pointer-events:auto}.panelIn{width:min(88vw,420px);height:100%;background:#fff;padding:22px;transform:translateX(105%);transition:.3s cubic-bezier(.2,.8,.2,1);overflow:auto}.panel.show .panelIn{transform:translateX(0)}.panelIn h2{margin-top:5px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px 16px 35px}@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.new-badge{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 6px;border-radius:999px;background:#1877f2;color:#fff;font-size:10px;font-weight:800;line-height:1;margin-left:auto;box-shadow:0 1px 4px #0002}
+.new-badge.hidden{display:none}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin"><div class="brand"><h1>Matric & Intermediate Guide</h1><p>Notes • Papers • Schemes • More</p></div><button class="menuBtn" id="menuBtn" aria-label="Menu">☰</button></div></header>
+<main class="wrap">
+<section class="hero"><h2>Your study space</h2><p>Swipe left or right to move between 9th, 10th, 11th and 12th.</p></section>
+<nav class="classNav" id="classNav"><button class="classBtn active" data-index="0">9th</button><button class="classBtn" data-index="1">10th</button><button class="classBtn" data-index="2">11th</button><button class="classBtn" data-index="3">12th</button></nav>
+<div class="viewport" id="viewport"><div class="track" id="track"></div></div>
+<div class="swipeHint">← Swipe to change class →</div><div class="dots" id="dots"></div>
+<section class="materials" id="materialSection" hidden><div class="sectionHead"><h3 id="materialTitle"></h3><span id="materialLive">Live</span></div><div id="materialList"></div></section>
+<section class="downloads" id="downloadsSection" hidden><div class="sectionHead"><h3>📥 My Downloads</h3><span id="downloadCount"></span></div><div id="downloadList"></div></section>
+</main><footer>© 2026 Matric & Intermediate Guide</footer>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer"><div class="drawerTop"><h2>Menu</h2><button class="closeBtn" id="closeMenu">×</button></div><button class="opt" data-info="about">👨‍💻 About Developer</button><button class="opt" data-info="contact">📞 Contact Us</button><button class="opt" data-info="feedback">💬 Feedback</button><button class="opt" id="downloadsBtn">📥 My Downloads</button></aside>
+<div class="panel" id="infoPanel"><div class="panelIn"><button class="closeBtn" id="closeInfo" style="float:right">×</button><h2 id="infoTitle"></h2><p id="infoText"></p></div></div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getFirestore,collection,query,where,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCEHTZWK_wUYr7JY3tnxYl3o25qfIZdUJY",authDomain:"matric-and-intermediate-guide.firebaseapp.com",databaseURL:"https://matric-and-intermediate-guide-default-rtdb.firebaseio.com",projectId:"matric-and-intermediate-guide",storageBucket:"matric-and-intermediate-guide.firebasestorage.app",messagingSenderId:"623596940051",appId:"1:623596940051:web:065599f46fa805cdf748e6",measurementId:"G-SYTQ7PEV66"};
+const db=getFirestore(initializeApp(firebaseConfig));
+const classes=["9th","10th","11th","12th"],categories=[['📚','Books','Textbooks & references'],['📝','Notes','Chapter-wise notes'],['📄','Past Papers','Previous board papers'],['📊','Pairing Schemes','Paper preparation'],['🎯','Guess Papers','Practice material'],['⭐','Important Questions','Focused revision'],['📅','Date Sheets','Exam schedules'],['❓','MCQs','Quick practice'],['🎮','Games','Learn while playing']];
+let index=0,unsubscribe=null,current=[];const downloadsKey='mig_downloads_v4';
+const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const getSaved=()=>{try{return JSON.parse(localStorage.getItem(downloadsKey)||'[]')}catch{return[]}};const saveSaved=a=>localStorage.setItem(downloadsKey,JSON.stringify(a));
+
+const NEW_DAYS=7;
+const seenKey='mig_seen_materials_v1';
+const getSeen=()=>{try{return JSON.parse(localStorage.getItem(seenKey)||'[]')}catch{return[]}};
+const saveSeen=a=>localStorage.setItem(seenKey,JSON.stringify(a));
+
+function materialTimestamp(x){
+  const v=x.uploadedAt||x.createdAt||x.timestamp||x.date;
+  if(!v)return 0;
+  try{
+    if(typeof v==='object' && typeof v.toMillis==='function') return v.toMillis();
+    if(typeof v==='object' && v.seconds) return Number(v.seconds)*1000;
+    const n=Number(v);
+    if(Number.isFinite(n)) return n<100000000000?n*1000:n;
+    const d=Date.parse(v);
+    return Number.isNaN(d)?0:d;
+  }catch{return 0}
+}
+
+function updateCategoryBadges(cls,materials){
+  const seen=getSeen();
+  const cutoff=Date.now()-NEW_DAYS*24*60*60*1000;
+  document.querySelectorAll('.classPage').forEach((page,i)=>{
+    if(classes[i]!==cls)return;
+    page.querySelectorAll('.new-badge').forEach(b=>{
+      const cat=b.dataset.newBadge;
+      const count=materials.filter(x=>{
+        if((x.category||'')!==cat)return false;
+        const t=materialTimestamp(x);
+        return t>0 && t>=cutoff && !seen.includes(x.id);
+      }).length;
+      b.textContent=count;
+      b.classList.toggle('hidden',count===0);
+    });
+  });
+}
+
+function markCategorySeen(cls,cat){
+  const all=getSeen();
+  const ids=current.filter(x=>(x.category||'')===cat).map(x=>x.id);
+  saveSeen([...new Set([...all,...ids])]);
+  document.querySelectorAll('.classPage').forEach((page,i)=>{
+    if(classes[i]!==cls)return;
+    page.querySelectorAll('.new-badge').forEach(b=>{
+      if(b.dataset.newBadge===cat){b.textContent='0';b.classList.add('hidden')}
+    });
+  });
+}
+
+function makePages(){const track=$('track');track.innerHTML='';classes.forEach((c,i)=>{const page=document.createElement('section');page.className='classPage';page.innerHTML=`<div class="classHead"><h3>${c} Class</h3><span class="count" id="count-${i}">Loading…</span></div><div class="grid"></div>`;const grid=page.querySelector('.grid');categories.forEach(([icon,name,sub])=>{const b=document.createElement('button');b.className='cat';b.innerHTML=`<strong>${icon} ${name}<span class="new-badge hidden" data-new-badge="${esc(name)}">0</span></strong><small>${sub}</small>`;b.addEventListener('click',()=>loadCategory(c,name));grid.appendChild(b)});track.appendChild(page);});$('dots').innerHTML=classes.map((_,i)=>`<span class="dot ${i===0?'active':''}"></span>`).join('');}
+function setClass(i,openCategory=false){index=Math.max(0,Math.min(3,i));$('track').style.transform=`translateX(-${index*25}%)`;document.querySelectorAll('.classBtn').forEach((b,j)=>b.classList.toggle('active',j===index));document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===index));document.querySelector('.classBtn.active')?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});if(openCategory){$('materialSection').hidden=true;$('downloadsSection').hidden=true}}
+function bindNav(){document.querySelectorAll('.classBtn').forEach(b=>b.addEventListener('click',()=>setClass(Number(b.dataset.index),true)))}
+let sx=0,sy=0,swiping=false;const vp=$('viewport');vp.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;swiping=true},{passive:true});vp.addEventListener('touchend',e=>{if(!swiping)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;swiping=false;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)){if(dx<0&&index<3)setClass(index+1,true);if(dx>0&&index>0)setClass(index-1,true)}});
+function loadCounts(){classes.forEach((c,i)=>{onSnapshot(query(collection(db,'materials'),where('class','==',c)),s=>{const el=$(`count-${i}`);if(el)el.textContent=`${s.size} material${s.size===1?'':'s'}`;const materials=[];s.forEach(d=>materials.push({id:d.id,...d.data()}));updateCategoryBadges(c,materials)},()=>{const el=$(`count-${i}`);if(el)el.textContent='—'})})}
+function loadCategory(cls,cat){markCategorySeen(cls,cat);$('downloadsSection').hidden=true;$('materialSection').hidden=false;$('materialTitle').textContent=`${cls} • ${cat}`;$('materialList').innerHTML='<div class="empty">Loading materials…</div>';if(unsubscribe)unsubscribe();const q=query(collection(db,'materials'),where('class','==',cls),where('category','==',cat));unsubscribe=onSnapshot(q,s=>{current=[];s.forEach(d=>current.push({id:d.id,...d.data()}));renderMaterials()},()=>{$('materialList').innerHTML='<div class="empty">Could not load materials. Check Firebase connection.</div>'});$('materialSection').scrollIntoView({behavior:'smooth',block:'start'})}
+function same(a,b){return a.id===b.id}
+function renderMaterials(){const list=$('materialList');list.innerHTML='';if(!current.length){list.innerHTML='<div class="empty">No material available yet for this category.</div>';return}const saved=getSaved();current.forEach(x=>{const d=document.createElement('article');d.className='material';d.innerHTML=`<h4>${esc(x.title||'Untitled')}</h4><div class="meta">${esc(x.class)} • ${esc(x.category)}</div>${x.description?`<div class="desc">${esc(x.description)}</div>`:''}`;if(!x.link){d.innerHTML+=`<div class="meta" style="margin-top:8px">No file link available.</div>`;list.appendChild(d);return}const open=document.createElement('a');open.className='btn open';open.textContent='Open Material';open.href=x.link;open.target='_blank';open.rel='noopener noreferrer';d.appendChild(open);const found=saved.find(z=>same(z,x));if(found){const b=document.createElement('button');b.className='btn download';b.textContent='↗ Open Saved';b.addEventListener('click',()=>openLink(found.link));const r=document.createElement('button');r.className='btn remove';r.textContent='Remove from My Downloads';r.addEventListener('click',()=>removeSaved(x));d.append(b,r)}else{const b=document.createElement('button');b.className='btn download';b.textContent='⬇ Download / Save';b.addEventListener('click',()=>downloadMaterial(x));d.appendChild(b)}list.appendChild(d)})}
+function openLink(link){if(!link)return;const a=document.createElement('a');a.href=link;a.target='_blank';a.rel='noopener noreferrer';a.style.display='none';document.body.appendChild(a);a.click();a.remove()}
+async function downloadMaterial(x){if(!x.link)return;const saved=getSaved();if(!saved.some(z=>same(z,x))){saved.push({...x,savedAt:Date.now()});saveSaved(saved)}renderMaterials();renderDownloads();openLink(x.link)}
+function removeSaved(x){saveSaved(getSaved().filter(z=>!same(z,x)));renderMaterials();renderDownloads()}
+function renderDownloads(){const a=getSaved(),list=$('downloadList');$('downloadCount').textContent=`${a.length} saved`;list.innerHTML='';if(!a.length){list.innerHTML='<div class="empty">No saved materials yet.</div>';return}a.forEach(x=>{const d=document.createElement('article');d.className='material';d.innerHTML=`<h4>${esc(x.title||'Untitled')}</h4><div class="meta">${esc(x.class)} → ${esc(x.category)}</div>`;const o=document.createElement('button');o.className='btn open';o.textContent='Open Material';o.addEventListener('click',()=>openLink(x.link));const r=document.createElement('button');r.className='btn remove';r.textContent='Remove';r.addEventListener('click',()=>{saveSaved(getSaved().filter(z=>!same(z,x)));renderDownloads();renderMaterials()});d.append(o,r);list.appendChild(d)})}
+function openMenu(){$('drawer').classList.add('show');$('overlay').classList.add('show')}function closeMenu(){$('drawer').classList.remove('show');$('overlay').classList.remove('show')}
+const info={about:['About Developer','This Software us developed by zaib gondal.The purpose of the software is to help students find useful study material such as notes,books,mcqs,pearing schemes,past papers etc,at one place instead of funfing them seperately.It saves both time and efforts of the students.'],contact:['Contact Us','zaibgonal41@gmail.com'],feedback:['Feedback','zaibgondal41@gmail.com']};
+function showInfo(type){$('infoTitle').textContent=info[type][0];$('infoText').textContent=info[type][1];closeMenu();$('infoPanel').classList.add('show')}
+$('menuBtn').addEventListener('click',openMenu);$('closeMenu').addEventListener('click',closeMenu);$('overlay').addEventListener('click',closeMenu);$('closeInfo').addEventListener('click',()=>$('infoPanel').classList.remove('show'));$('infoPanel').addEventListener('click',e=>{if(e.target===$('infoPanel'))$('infoPanel').classList.remove('show')});document.querySelectorAll('.opt[data-info]').forEach(b=>b.addEventListener('click',()=>showInfo(b.dataset.info)));$('downloadsBtn').addEventListener('click',()=>{closeMenu();$('materialSection').hidden=true;$('downloadsSection').hidden=false;renderDownloads();$('downloadsSection').scrollIntoView({behavior:'smooth',block:'start'})});
+makePages();bindNav();loadCounts();renderDownloads();
+</script></body></html>
